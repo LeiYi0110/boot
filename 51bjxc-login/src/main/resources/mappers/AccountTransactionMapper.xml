@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.AccountTransactionMapper">
+	<select id="getTransactionByAccountIdForApp" resultType="com.bjxc.school.AccountTransaction">
+			select id, transaction_type as transactionType, if(transaction_type in (5,7),CONCAT('+',transaction_mny),CONCAT('-',transaction_mny))  as transactionMnyWithSign, account_mny as accountMny, transaction_time as transactionDate,is_valid as isValid  
+			from t_account_transaction 
+			where account_id = #{accountId} and is_valid = 1
+			order by transaction_time
+			limit #{startIndex},#{length}
+	</select>
+	<select id="getTransactionMonthSum" resultType="com.bjxc.school.TransactionMonthSum">
+	
+	select `year`,`month`, sum(if(transaction_type in (5,7),transaction_mny,0)) as income, sum(if(transaction_type not in (5,7),transaction_mny,0)) as expenditure
+	from 
+	(
+		select transaction_type,YEAR(transaction_time) as `year`, month(transaction_time) as `month`, transaction_mny
+		from t_account_transaction 
+		where account_id = #{accountId} and is_valid = 1
+	) as B
+	group by `year`,`month` desc 
+	
+	</select>
+</mapper>

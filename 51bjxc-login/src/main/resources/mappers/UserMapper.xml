@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.UserMapper">
+	<select id="login" resultType="com.bjxc.school.User" parameterType="java.util.Map">
+		select id,mobile,head_img as headimg,status,user_role as role from t_app_user where mobile=#{mobile} and password=#{pwd}
+	</select>
+	
+	<select id="getInfo" resultType="com.bjxc.school.User" parameterType="java.util.Map">
+		select mobile,head_img as Headimg,status as Status,user_role as role,card_num as idcard,sex,user_name as username, password from t_app_user where id=#{id}
+	</select>
+	
+	<select id="testUser" resultType="int" parameterType="java.util.Map">
+		select count(1) from t_app_user where mobile=#{mobile} 
+		<if test="status!=null and status!=''">
+			and Status=#{status} 
+		</if>
+	</select>
+	
+	<update id="changePassword" parameterType="java.util.Map">
+		update t_app_user set password=#{newpwd} where 1=1 
+		<if test="id!=null and id!=''">
+			and id=#{id}
+		</if>
+		<if test="mobile!=null and mobile!=''">
+			and mobile=#{mobile}
+		</if>
+		<if test="oldpwd!=null and oldpwd!=''">
+			and password=#{oldpwd}
+		</if>
+	</update>
+	
+	<update id="changeHead" parameterType="java.util.Map">
+		update t_app_user 
+		<set>
+			<if test="src!=null and src!=''">
+				head_img=#{src},
+			</if>
+			<if test="idcard!=null and idcard!=''">
+				card_num=#{idcard},
+			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="userName!=null and userName!=''">
+				user_name=#{userName} 
+			</if>
+		</set>
+		where id=#{id};
+	</update>
+	
+	<update id="changeStuHead" parameterType="java.util.Map">
+		update t_student
+		<set>
+			<if test="idcard!=null and idcard!=''">
+				card_num=#{idcard},
+			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="userName!=null and userName!=''">
+				name=#{userName} 
+			</if>
+		</set>
+		where user_id=#{id};
+	</update>
+	
+	<update id="changeCocahHead" parameterType="java.util.Map">
+		update TCoach 
+		<set>
+			<if test="idcard!=null and idcard!=''">
+				idcard=#{idcard},
+			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="userName!=null and userName!=''">
+				name=#{userName} 
+			</if>
+		</set>
+		where user_id=#{id};
+	</update>
+	
+	<insert id="add" parameterType="java.util.Map">
+		insert into t_app_user(mobile,password,user_role,create_time) value(#{mobile},#{newpwd},#{role},NOW())
+	</insert>
+</mapper>

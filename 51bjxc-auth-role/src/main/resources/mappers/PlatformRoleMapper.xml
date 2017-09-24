@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.PlatformRoleMapper">
+	
+	<select id="getRoleList" resultType="com.bjxc.school.PlatformRole">
+			select t_platform_role.id as id,role_name as roleName,if(role_count is null, 0,role_count) as roleUserCount, t_platform_user.user_name as operateUserName,t_platform_role.update_time as updateTime
+			from t_platform_role
+			left join 
+			(select role_id, count(user_id) as role_count
+			from t_platform_user_role
+			group by  role_id) as roleCount
+			on t_platform_role.id = roleCount.role_id
+			inner join t_platform_user
+			on t_platform_role.op_user_id = t_platform_user.id
+			where t_platform_role.ins_id = #{insId}
+			limit #{startIndex}, #{length}
+	</select>
+	
+	<select id="getRoleListCount" resultType="Integer">
+			select count(*)
+			from t_platform_role
+			left join 
+			(select role_id, count(user_id) as role_count
+			from t_platform_user_role
+			group by  role_id) as roleCount
+			on t_platform_role.id = roleCount.role_id
+			inner join t_platform_user
+			on t_platform_role.op_user_id = t_platform_user.id
+			where t_platform_role.ins_id = #{insId}
+	</select>
+	
+	<insert id="addPlatformRole" parameterType="com.bjxc.school.PlatformRole" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `t_platform_role`(`role_key`,`role_name`,`ins_id`,`ins_code`,`update_time`,`op_user_id`)
+	    VALUES(#{roleKey},#{roleName},#{insId},#{insCode},now(),#{operatorId})
+	</insert>
+	
+	
+		
+</mapper>

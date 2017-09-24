@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.PlatformUserMapper">
+	
+	<select id="getUserList" resultType="com.bjxc.school.PlatformUser">
+			select t_platform_user.id,t_platform_user.user_name as userName, password, '1' as inscode , role_name,t_platform_user.status,mobile,
+			t_platform_user_role.role_id as roleId , ins_area_id as areaId, ins_station_id as stationId, t_platform_user_role.id as userRoleId,if(ins_area_id is null, '驾校',if(ins_station_id is null, t_institution_area.name,t_institution_station.name)) as manageRange
+from t_platform_user 
+inner join t_platform_user_role on t_platform_user.id = t_platform_user_role.user_id
+inner join t_platform_role on t_platform_user_role.role_id = t_platform_role.id
+left join t_institution_area on t_platform_user.ins_area_id = t_institution_area.id
+left join t_institution_station on t_platform_user.ins_station_id = t_institution_station.id
+<where>
+			<if test="searchText != null and searchText !=''">
+				and (t_platform_user.user_name like CONCAT(CONCAT('%',#{searchText}), '%')
+				or t_platform_user.mobile like CONCAT(CONCAT('%',#{searchText}), '%')
+				)
+			</if>
+			<if test="role != null and role !='0' and role != 0">
+				and t_platform_user_role.role_id = #{role}
+			</if>
+			
+			and t_platform_user.ins_id = #{insId}
+		</where>
+		
+		limit #{startIndex}, #{length}
+
+	</select>
+	
+	<select id="getUserListCount" resultType="Integer">
+			select count(*)
+from t_platform_user 
+inner join t_platform_user_role on t_platform_user.id = t_platform_user_role.user_id
+inner join t_platform_role on t_platform_user_role.role_id = t_platform_role.id
+left join t_institution_area on t_platform_user.ins_area_id = t_institution_area.id
+left join t_institution_station on t_platform_user.ins_station_id = t_institution_station.id
+<where>
+			<if test="searchText != null and searchText !=''">
+				and (t_platform_user.user_name like CONCAT(CONCAT('%',#{searchText}), '%')
+				or t_platform_user.mobile like CONCAT(CONCAT('%',#{searchText}), '%')
+				)
+			</if>
+			<if test="role != null and role !='0' and role != 0">
+				and t_platform_user_role.role_id = #{role}
+			</if>
+			and t_platform_user.ins_id = #{insId}
+		</where>
+
+	</select>
+	
+	
+	
+	<insert id="addUser" parameterType="com.bjxc.school.PlatformUser" useGeneratedKeys="true" keyProperty="id">
+		insert t_platform_user(user_name,password,ins_id,ins_area_id,ins_station_id,create_time,salt,mobile) 
+		values(#{userName},#{password},#{insId},#{areaId},#{stationId},now(),#{salt},#{mobile})
+	</insert>
+	
+	
+	<select id="getUser" resultType="com.bjxc.school.PlatformUser">
+			select t_platform_user.id,t_platform_user.user_name as userName, password, t_institution.Ins_code as inscode , t_platform_user.ins_id as insId,role_name,t_platform_user.status,mobile,
+			t_platform_user_role.role_id as roleId , ins_area_id as areaId, ins_station_id as stationId, t_platform_user_role.id as userRoleId,salt,t_institution.Name as insName
+from t_platform_user 
+inner join t_platform_user_role on t_platform_user.id = t_platform_user_role.user_id
+inner join t_platform_role on t_platform_user_role.role_id = t_platform_role.id
+left join t_institution on t_platform_user.ins_id = t_institution.id
+where user_name = #{user_name}
+
+
+
+	</select>
+	
+	
+	
+		
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.AccountMapper">
+	
+	<select id="getPayRecord" resultType="com.bjxc.school.PayRecord">
+			select create_time, total_fee, category, A.p_year, A.p_month,month_sum_fee
+from
+(
+select t_pay_order.create_time, t_pay_order.total_fee, '报名' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order inner join t_student_referee on t_pay_order.b_id = t_student_referee.ID and t_pay_order.b_type = 1
+where t_pay_order.`status` = 1 and t_student_referee.User_ID = #{userId}
+union
+select t_pay_order.create_time, t_pay_order.total_fee, '先付后学' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order
+inner join t_student_reserve on t_pay_order.b_id = t_student_reserve.id and t_pay_order.b_type = 3
+inner join t_student on t_student_reserve.student_id = t_student.id
+where t_pay_order.`status` = 1 and t_student.user_id = #{userId}
+union
+select t_pay_order.create_time, t_pay_order.total_fee, '先学后付' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order
+inner join t_student_reserve on t_pay_order.b_id = t_student_reserve.id and t_pay_order.b_type = 4
+inner join t_student on t_student_reserve.student_id = t_student.id
+where t_pay_order.`status` = 1 and t_student.user_id = #{userId}
+union
+select t_pay_order.create_time, t_pay_order.total_fee, '充值' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order
+inner join t_top_up on t_pay_order.b_id = t_top_up.id and t_pay_order.b_type = 5
+inner join t_account on t_top_up.account_id = t_account.id
+where t_pay_order.`status` = 1 and t_account.user_id = #{userId}
+) as A
+inner join 
+(
+select sum(total_fee) as month_sum_fee,p_year,p_month
+from (
+select t_pay_order.create_time, t_pay_order.total_fee, 'apply' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order inner join t_student_referee on t_pay_order.b_id = t_student_referee.ID and t_pay_order.b_type = 1
+where t_pay_order.`status` = 1 and t_student_referee.User_ID = #{userId}
+union
+select t_pay_order.create_time, t_pay_order.total_fee, 'payFirst' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order
+inner join t_student_reserve on t_pay_order.b_id = t_student_reserve.id and t_pay_order.b_type = 3
+inner join t_student on t_student_reserve.student_id = t_student.id
+where t_pay_order.`status` = 1 and t_student.user_id = #{userId}
+union
+select t_pay_order.create_time, t_pay_order.total_fee, 'payAfter' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order
+inner join t_student_reserve on t_pay_order.b_id = t_student_reserve.id and t_pay_order.b_type = 4
+inner join t_student on t_student_reserve.student_id = t_student.id
+where t_pay_order.`status` = 1 and t_student.user_id = #{userId}
+union
+select t_pay_order.create_time, t_pay_order.total_fee, 'top_up' as category, year(t_pay_order.create_time) as p_year,month(t_pay_order.create_time) as p_month
+from t_pay_order
+inner join t_top_up on t_pay_order.b_id = t_top_up.id and t_pay_order.b_type = 5
+inner join t_account on t_top_up.account_id = t_account.id
+where t_pay_order.`status` = 1 and t_account.user_id = #{userId}
+) as B
+group by p_year,p_month
+) as D
+on A.p_year = D.p_year and A.p_month = D.p_month
+order by create_time desc
+limit #{startIndex},#{length}
+	</select>
+	
+	
+	<select id="getAccountList" resultType="com.bjxc.school.Account">
+		select t_app_user.user_name as userName, t_app_user.card_num as idCard, t_app_user.mobile as mobile, t_account.mny as mny, t_account.id as id
+		from t_account
+		inner join t_app_user on t_account.user_id = t_app_user.id
+		<where>
+			<if test="searchText != null and searchText !=''">
+				t_app_user.user_name like CONCAT(CONCAT('%',#{searchText}), '%')
+				or
+				t_app_user.card_num like CONCAT(CONCAT('%',#{searchText}), '%')
+				or
+				t_app_user.mobile like CONCAT(CONCAT('%',#{searchText}), '%')
+			</if>
+		</where>
+		limit #{startIndex},#{length}
+	</select>
+	
+	<select id="getAccountListCount" resultType="Integer">
+		select count(*)
+		from t_account
+		inner join t_app_user on t_account.user_id = t_app_user.id
+		<where>
+			<if test="searchText != null and searchText !=''">
+				t_app_user.user_name like CONCAT(CONCAT('%',#{searchText}), '%')
+				or
+				t_app_user.card_num like CONCAT(CONCAT('%',#{searchText}), '%')
+				or
+				t_app_user.mobile like CONCAT(CONCAT('%',#{searchText}), '%')
+			</if>
+		</where>
+	</select>
+	
+		
+</mapper>

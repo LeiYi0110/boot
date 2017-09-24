@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>API Test</title>
+        <script language='javascript' src='jquery.min.js'></script>
+    </head>
+    <body>
+        <h1>测试接口</h1>
+        
+        <div style="width: 100%; margin-top: 10px;">
+		<div style="width: 100%;">
+			<h3>1. 测试 get</h3>
+			<form action="test?token={token}">
+  			
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			test:<input type="text" name="test" /><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>2. 测试 post</h3>
+			<form action="test/post/{id}?token={token}" method="post">
+  			
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			startIndex:<input type="text" name="id"/>(必填)<br/>
+    			test:<input type="text" name="test" /><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>解决方案列表</h3>
+			<form action="solutionList?token={token}">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>初始化驾校管理员角色（平台级用户可调用）</h3>
+			<form action="initInsManagementRole?token={token}" method="post">
+  			
+    			token:<input type="text" name="token" restful="token" />(必填)<br />
+    			insId:<input type="text" name="insId" />(必填)<br />
+    			<input type="submit" value="提交" onclick="return submitForm(this)" />
+    			<div class="result_div"></div>
+  			
+			</form>
+			<hr />
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>初始化驾校教练App排班设置（平台级用户可调用）</h3>
+			<form action="initCoachAppSetting?token={token}" method="post">		
+    			token:<input type="text" name="token" restful="token" />(必填)<br />
+    			insId:<input type="text" name="insId" />(必填)<br />
+       			<input type="submit" value="提交" onclick="return submitForm(this)" />
+    			<div class="result_div"></div>
+  			
+			</form>
+			<hr />
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>初始化驾校招生设置（平台级用户可调用）</h3>
+			<form action="initAppRecruitSetting?token={token}" method="post">  			
+    			token:<input type="text" name="token" restful="token" />(必填)<br />
+    			insId:<input type="text" name="insId" />(必填)<br />
+    			<input type="submit" value="提交" onclick="return submitForm(this)" />
+    			<div class="result_div"></div>
+  			
+			</form>
+			<hr />
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取教练App排班设置</h3>
+			<form action="app/coachAppSetting?token={token}" method="post">  			
+    			token:<input type="text" name="token" restful="token" />(必填)<br />
+				<input type="submit" value="提交" onclick="return submitForm(this)" />    			<div class="result_div"></div>
+  			
+			</form>
+			<hr />
+		</div>
+		<!-- 
+		<div style="width: 100%;">
+			<h3>获取App招生设置信息</h3>
+			<form action="app/AppRecruitSetting?token={token}" method="post">  			
+    			token:<input type="text" name="token" restful="token" />(必填)<br />
+    			<input type="submit" value="提交" onclick="return submitForm(this)" />    
+    			<div class="result_div"></div>
+  			
+			</form>
+			<hr />
+		</div>
+		 -->
+		
+		
+		</div>
+
+<script type="text/javascript">	
+	function submitForm(button){
+		console.log('OK');
+		var form = $(button).parent();
+		var url = form.attr('action');
+		console.log(url);
+		var method = form.attr('method');
+			method = method ? method:"GET";
+		console.log(method);
+		var param = {};
+		$(form).find('input').each(function(){
+			var value = $(this).val();
+			var name = $(this).attr("name");
+			var restful = $(this).attr("restful");
+			if(restful){
+				console.log("restful:" + restful)
+				url = url.replace('{' + restful + '}',value);
+			}else{
+				param[name] = value;
+			}
+		});
+		console.log("url:" + url);
+		
+		
+		$.ajax({
+			type : method,
+			url : url,
+			data:param,
+			dataType : "text",
+			success : function(data){
+				console.log(data);
+				$(form).find(".result_div").text(data);	
+			}
+		});
+		return false;
+		
+	}
+	
+</script>
+    </body>
+</html>

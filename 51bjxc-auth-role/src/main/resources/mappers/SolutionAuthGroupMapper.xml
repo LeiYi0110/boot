@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.SolutionAuthGroupMapper">
+	
+	<select id="getFunctionConfigSolutionAuthGroupList" resultType="com.bjxc.school.SolutionAuthGroup">
+			SELECT t_platform_authority_group.id as authGroupId, t_platform_authority_group.group_name as authGroupName, if(B.auth_group_id, '已购买','未购买') as `status`, price, unit
+			FROM 51bjxc_micro_service.t_platform_authority_group
+			left join 
+			(
+				select distinct(auth_group_id) as auth_group_id
+				from t_institution
+				left join t_solution_auth_group on t_solution_auth_group.solution_id = t_institution.solution_id
+				where t_institution.id = #{insId}
+			) as B
+			on t_platform_authority_group.id = B.auth_group_id
+	</select>
+	
+	<select id="getSchoolSolutionAuthGroupList" resultType="com.bjxc.school.SolutionAuthGroup">
+			SELECT t_platform_authority_group.id as authGroupId,t_platform_authority_group.group_name as authGroupName, '已开通' as `status`, price, unit
+			FROM 51bjxc_micro_service.t_platform_authority_group
+			inner join 
+			(
+				select distinct(auth_group_id) as auth_group_id
+				from t_institution
+				left join t_solution_auth_group on t_solution_auth_group.solution_id = t_institution.solution_id
+				where t_institution.id = #{insId}
+			) as B
+			on t_platform_authority_group.id = B.auth_group_id
+	</select>
+
+	
+
+	
+	
+		
+</mapper>

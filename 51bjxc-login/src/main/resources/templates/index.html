@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>API Test</title>
+        <script language='javascript' src='jquery.min.js'></script>
+    </head>
+    <body>
+        <h1>测试接口</h1>
+        
+        <div style="width: 100%; margin-top: 10px;">
+		<div style="width: 100%;">
+			<h3>1. 测试 get</h3>
+			<form action="test?token={token}">
+  			
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			test:<input type="text" name="test" /><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>2. 测试 post</h3>
+			<form action="test/post/{id}?token={token}" method="post">
+  			
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			id:<input type="text" name="id" restful="id"/>(必填)<br/>
+    			test:<input type="text" name="test" /><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>Login</h3>
+			<form action="login" method="post">
+    			userName:<input type="text" name="userName" value="test53"/>(必填)<br/>
+    			pwd:<input type="text" name="pwd" value = "123456"/><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取平台用户列表</h3>
+			<form action="platformUserList?token={token}">
+  			
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			searchText:<input type="text" name="searchText"/><br/>
+    			
+    			role:<input type="text" name="role"/><br/>
+  				startIndex:<input type="text" name="startIndex"/><br/>
+  				length:<input type="text" name="length"/><br/>
+    			<!-- 
+    			role:<select class="form-control" name="role">
+								<option value="0">全部账号</option>
+								<option value="2">机构管理员</option>
+								<option value="3">网点管理员</option>
+				 
+				</select><br/>
+				 -->
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取驾校权限列表</h3>
+			<form action="roles?token={token}">
+  			
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+  			
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>添加平台用户</h3>
+			<form action="addPlatformUser?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			userName:<input type="text" name="userName"/>(必填)<br/>
+    			mobile:<input type="text" name="mobile"/><br/>
+    			roleId:<input type="text" name="roleId" />(必填)<br/>
+    			insId:<input type="text" name="insId" />(必填)<br/>
+    			areaId:<input type="text" name="areaId" /><br/>
+    			stationId:<input type="text" name="stationId" /><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>App用户登录</h3>
+			<form action="app/login" method="post">
+    			mobile:<input type="text" name="mobile"/><br/>
+    			password:<input type="text" name="password" />(必填)<br/>
+    			app(1-学员 2-教练):<input type="text" name="app" />(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>发校验码</h3>
+			<form action="app/identCode/{app}/{mobile}" method="get">
+    			mobile:<input type="text" name="mobile" restful="mobile"/><br/>
+    			app<input type="text" name="app" restful="app" value="com.bjxc.student"/>(必填)<br/>
+    			use(1-注册 2-忘记密码 3-绑定银行卡):<input type="text" name="use"/><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>App用户注册</h3>
+			<form action="app/register" method="post">
+    			mobile:<input type="text" name="mobile" value="15626516316"/><br/>
+    			password:<input type="text" name="password" value="123456"/>(必填)<br/>
+    			app:<input type="text" name="app" value="com.bjxc.student"/>(必填)<br/>
+    			identCode:<input type="text" name="identCode" />(必填)<br/>
+    			
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>App用户登录</h3>
+			<form action="app/login" method="post">
+    			mobile:<input type="text" name="mobile"/><br/>
+    			password:<input type="text" name="password" />(必填)<br/>
+    			app(1-学员 2-教练):<input type="text" name="app" />(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>App获取用户信息</h3>
+			<form action="app/userInfo?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<!-- String token,String newPassword,String oldPassword,String mobile,
+			String identCode,String app -->
+		<div style="width: 100%;">
+			<h3>App修改密码</h3>
+			<form action="app/changePassword?token={token}" method="post">
+				token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			newPassword:<input type="text" name="newPassword" />(必填)<br/>
+    			oldPassword:<input type="text" name="oldPassword" />(必填)<br/>
+    			app:<input type="text" name="app" value="com.bjxc.student"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>App找回密码</h3>
+			<form action="app/setPasswordWhenForgot" method="post">
+    			mobile:<input type="text" name="mobile"/><br/>
+    			newPassword:<input type="text" name="newPassword" />(必填)<br/>
+    			identCode:<input type="text" name="identCode" />(必填)<br/>
+    			app:<input type="text" name="app" value="com.bjxc.student"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<!-- String token,String headImg,String idcard,Integer sex,String userName -->
+		<div style="width: 100%;">
+			<h3>App修改用户信息</h3>
+			<form action="app/user/update?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			headImg:<input type="text" name="headImg"/><br/>
+    			idcard:<input type="text" name="idcard" />(必填)<br/>
+    			sex:<input type="text" name="sex" />(必填)<br/>
+    			userName:<input type="text" name="userName" />(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>App用户登出</h3>
+			<form action="app/logout?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>App用户设置账户密码</h3>
+			<form action="/setAccountPassword?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			password:<input type="text" name="password"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>App用户修改账户密码</h3>
+			<form action="/changeAccountPassword?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			oldPassword:<input type="text" name="oldPassword"/>(必填)<br/>
+    			newPassword:<input type="text" name="newPassword"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<div style="width: 100%;">
+			<h3>App用户检测账户密码</h3>
+			<form action="/checkAccountPwd?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			password:<input type="text" name="password"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		<!-- String token, String checkCode,String cardNum, String mobile -->
+		<div style="width: 100%;">
+			<h3>App用户绑定银行卡</h3>
+			<form action="/addBankCard?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			checkCode:<input type="text" name="checkCode"/>(必填)<br/>
+    			cardNo:<input type="text" name="cardNo" />(必填)<br/>
+    			mobile:<input type="text" name="mobile" />(必填)<br/>
+    			bankId:<input type="text" name="bankId" />(必填)<br/>
+    			cardHolder:<input type="text" name="cardHolder" />(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>App用户获取用户绑定的银行卡列表</h3>
+			<form action="/bankCardList?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>App用户删除用户银行卡</h3>
+			<form action="/deleteBankCard?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			bankCardId:<input type="text" name="bankCardId" />(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取银行卡列表</h3>
+			<form action="/bankList?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取用户账户信息</h3>
+			<form action="accountInfo?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取支付记录</h3>
+			<form action="payRecord?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			startIndex:<input type="text" name="startIndex"/><br/>
+  				length:<input type="text" name="length"/><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>生成充值业务订单</h3>
+			<form action="generateTopUpOrder?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			mny:<input type="text" name="mny"/><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>提现</h3>
+			<form action="withdraw?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			bankCardId:<input type="text" name="bankCardId"/>(必填)<br/>
+    			mny:<input type="text" name="mny"/><br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+
+		
+		<div style="width: 100%;">
+			<h3>获取用户钱包交易记录</h3>
+			<form action="userAccountTransaction?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			startIndex:<input type="text" name="startIndex"/>(必填)<br/>
+    			length:<input type="text" name="length"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>获取用户钱包月收支</h3>
+			<form action="transactionMonthSum?token={token}" method="get">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>用户钱包收入与消费</h3>
+			采用rabbitmq发送信息<br/>
+			队列名：account-transaction<br/>
+			参数：userId, transactionType(1-学员报名 2-网络教育付费账号 3-先付后学 4-先学后付 5-钱包充值 6-钱包提款 7-招生奖励),<br/>
+			transactionMny,businessId("相应的业务订单的id, 同订单表的bid")
+			<hr/>
+		</div>
+		
+		<div style="width: 100%;">
+			<h3>初始化驾校管理员用户</h3>
+			<form action="initInsPlatformUser?token={token}" method="post">
+    			token:<input type="text" name="token" restful="token"/>(必填)<br/>
+    			roleId:<input type="text" name="roleId"/>(必填)<br/>
+    			userName:<input type="text" name="userName"/>(必填)<br/>
+    			mobile:<input type="text" name="mobile"/>(必填)<br/>
+    			<input type="submit" value="提交" onclick="return submitForm(this)"/>
+    			<div class = "result_div"></div>
+			</form>
+			<hr/>
+		</div>
+		</div>
+
+<script type="text/javascript">	
+	function submitForm(button){
+		console.log('OK');
+		var form = $(button).parent();
+		var url = form.attr('action');
+		console.log(url);
+		var method = form.attr('method');
+			method = method ? method:"GET";
+		console.log(method);
+		var param = {};
+		$(form).find('input').each(function(){
+			var value = $(this).val();
+			var name = $(this).attr("name");
+			var restful = $(this).attr("restful");
+			if(restful){
+				console.log("restful:" + restful)
+				url = url.replace('{' + restful + '}',value);
+			}else{
+				param[name] = value;
+			}
+		});
+		console.log("url:" + url);
+		
+		
+		$.ajax({
+			type : method,
+			url : url,
+			data:param,
+			dataType : "text",
+			success : function(data){
+				console.log(data);
+				$(form).find(".result_div").text(data);	
+			}
+		});
+		return false;
+		
+	}
+	
+</script>
+    </body>
+</html>

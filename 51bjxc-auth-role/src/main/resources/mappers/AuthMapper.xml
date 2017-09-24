@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.AuthMapper">
+	
+	<select id="getAuthList" resultType="com.bjxc.school.AuthDB">
+			
+		select a1.id as a1Id, a2.id as a2Id, a3.id as a3Id, a1.authority_name as a1Name, a2.authority_name as a2Name,a3.authority_name as a3Name
+		from 
+		(select id, authority_name 
+		from t_platform_authority 
+		where authority_level = 1 
+		order by id
+		) as a1,
+		(select id, authority_name , parent_id
+		from t_platform_authority 
+		where authority_level = 2 
+		order by id
+		) as a2,
+		(select id, authority_name , parent_id
+		from t_platform_authority 
+		where authority_level = 3 
+		order by id
+		) as a3
+		where a1.id = a2.parent_id and a2.id = a3.parent_id
+		order by a1.id,a2.id,a3.id
+	</select>
+
+	
+	
+		
+</mapper>

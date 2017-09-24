@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.mapper.WithdrawMapper">
+	
+	<select id="getWithdrawList" resultType="com.bjxc.school.Withdraw">
+		select t_withdraw.id as id, t_withdraw.mny as mny, apply_time as applyTime, t_withdraw.status as status, t_account_transaction.account_mny as accountMny, t_app_user.user_name as userName, 
+				t_app_user.mobile as mobile,t_app_user.card_num as idCard,t_account.id as accountId,
+				t_bank_card.card_no as bankCardNo, t_bank.bank_name as bankName
+		from t_withdraw
+		inner join t_account on t_withdraw.account_id = t_account.id
+		inner join t_app_user on t_account.user_id = t_app_user.id
+		inner join t_bank_card on t_withdraw.bank_card_id = t_bank_card.id
+		inner join t_bank on t_bank_card.bank_id = t_bank.id
+		inner join t_account_transaction on t_account_transaction.business_id = t_withdraw.id and t_account_transaction.transaction_type = 6
+		<where>
+			<if test="status != null">
+				t_withdraw.status = #{status}
+			</if>
+			
+			<if test="startTime != null">
+				and apply_time &gt; #{startTime}
+			</if>
+			<if test="endTime != null">
+				and apply_time &lt; #{endTime}
+			</if>
+		</where>
+		order by apply_time desc
+		limit #{startIndex},#{length}
+	</select>
+	
+	<select id="getWithdrawListCount" resultType="Integer">
+		select count(*)
+		from t_withdraw
+		inner join t_account on t_withdraw.account_id = t_account.id
+		inner join t_app_user on t_account.user_id = t_app_user.id
+		inner join t_bank_card on t_withdraw.bank_card_id = t_bank_card.id
+		inner join t_bank on t_bank_card.bank_id = t_bank.id
+		inner join t_account_transaction on t_account_transaction.business_id = t_withdraw.id and t_account_transaction.transaction_type = 6
+		<where>
+			<if test="status != null">
+				t_withdraw.status = #{status}
+			</if>
+			
+			<if test="startTime != null">
+				and apply_time &gt; #{startTime}
+			</if>
+			<if test="endTime != null">
+				and apply_time &lt; #{endTime}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="addWithdraw" parameterType="com.bjxc.school.Withdraw" useGeneratedKeys="true" keyProperty="id">
+		insert t_withdraw(account_id,mny,apply_time,status, bank_card_id) 
+		values(#{accountId},#{mny},now(),0,#{bankCardId})
+	</insert>
+	
+	
+		
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjxc.school.demo.TestMapper">
+	
+	<select id="findXML" resultType="com.bjxc.school.demo.TestUser">
+			select ID, UserName from tplatformuser where ID = 1
+	</select>
+	
+	
+		
+</mapper>
